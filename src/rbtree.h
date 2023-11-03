@@ -28,7 +28,7 @@ void free_node(node_t*);
 void delete_rbtree(rbtree *);
 
 node_t *rbtree_insert(rbtree *, const key_t);
-void rbtree_insert_fixup(rbtree *, node_t *)
+void rbtree_insert_fixup(rbtree *, node_t *);
 
 node_t *rbtree_find(const rbtree *, const key_t);
 void rbtree_delete_fixup(rbtree *, node_t *);
