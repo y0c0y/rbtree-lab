@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+# define SENTINEL 1 // sentinel을 사용할지 여부
+
 // new_rbtree should return rbtree struct with null root node
 void test_init(void) {
   rbtree *t = new_rbtree();
@@ -13,6 +15,8 @@ void test_init(void) {
   assert(t->root == t->nil);
 #else
   assert(t->root == NULL);
+  printf("here\n");
+  return -1;
 #endif
   delete_rbtree(t);
 }
