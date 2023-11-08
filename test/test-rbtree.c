@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-# define SENTINEL 1 // sentinel을 사용할지 여부
+// # define SENTINEL 1 // sentinel을 사용할지 여부
 
 // new_rbtree should return rbtree struct with null root node
 void test_init(void) {
