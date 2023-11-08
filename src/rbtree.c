@@ -5,7 +5,6 @@
 
 // 트리를 생성하는 함수
 rbtree *new_rbtree(void) {
-  // TODO: initialize struct if needed
   rbtree *p = (rbtree *)calloc(1, sizeof(rbtree)); // 트리 구조체를 할당
   node_t *NIL = (node_t *)calloc(1, sizeof(node_t)); // NIL 노드를 할당
 
@@ -91,7 +90,7 @@ void rbtree_insert_fixup(rbtree *t, node_t *z) {
        z->parent->color = RBTREE_BLACK; // z의 부모 노드의 색을 검은색으로 만듦
        y->color = RBTREE_BLACK; // y의 색을 검은색으로 만듦
        z->parent->parent->color = RBTREE_RED; // z의 부모 노드의 부모 노드의 색을 빨간색으로 만듦
-        z = z->parent->parent; // z를 z의 부모 노드의 부모 노드로 만듦
+       z = z->parent->parent; // z를 z의 부모 노드의 부모 노드로 만듦
      }
      else
      {
@@ -131,22 +130,25 @@ void rbtree_insert_fixup(rbtree *t, node_t *z) {
   t->root->color = RBTREE_BLACK; // root 노드의 색을 검은색으로 만듦
 }
 
-
-
 // 트리에 노드를 삽입하는 함수
 node_t *rbtree_insert(rbtree *t, const key_t key) {
   node_t* y = t->nil; // y는 NIL 노드
   node_t* x = t->root; // x는 root 노드
+  
   while(x != t->nil) // x가 NIL 노드가 아닌 동안 반복
   {
     y = x; // y를 x로 만듦
     if(key < x->key) x = x->left; // key가 x의 키보다 작으면 x를 x의 왼쪽 자식 노드로 만듦
     else x = x->right; // 그렇지 않으면 x를 x의 오른쪽 자식 노드로 만듦
   }
+
   node_t* z = (node_t *)calloc(1, sizeof(node_t)); // z는 새로운 노드
+  
   if(z == NULL) return NULL; // 할당에 실패하면 NULL 반환
+  
   z->key = key; // z의 키를 key로 만듦
   z->parent = y; // z의 부모 노드를 y로 만듦
+
   if (y == t->nil) t->root = z; // y가 NIL 노드이면 z를 root 노드로 만듦
   else if (key < y->key) y->left = z; // key가 y의 키보다 작으면 z를 y의 왼쪽 자식 노드로 만듦
   else y->right = z; // 그렇지 않으면 z를 y의 오른쪽 자식 노드로 만듦
@@ -154,33 +156,25 @@ node_t *rbtree_insert(rbtree *t, const key_t key) {
   z->left = t->nil; // z의 왼쪽 자식 노드를 NIL 노드로 만듦
   z->right = t->nil; // z의 오른쪽 자식 노드를 NIL 노드로 만듦
   z->color = RBTREE_RED; // z의 색을 빨간색으로 만듦
+
   rbtree_insert_fixup(t, z); // 삽입 후 불균형을 해결
   return z; // 삽입한 노드 반환
 }
 
  // 트리에서 노드를 찾는 함수(중복 값이 있을 때)
-node_t *rbtree_find(const rbtree *t, const key_t key) {
+node_t *rbtree_find(const rbtree *t, const key_t key)
+{
     node_t *p = t->root;
 
-    while (p != t->nil && key != p->key) {
-        if (key < p->key) {
-            p = p->left;
-        } else {
-            p = p->right;
-        }
+    while (p != t->nil && key != p->key) 
+    {
+        if (key < p->key) p = p->left;
+        else p = p->right;
     }
 
-    if (p != t->nil && p->key == key) {
-        return p; // Found the node with the key.
-    } else {
-        // If you want to notify when the node is not found, you can keep this.
-        // printf("Node does not exist\n"); 
-        fflush(stdout);
-        return NULL; // Node was not found.
-    }
+    if (p != t->nil && p->key == key) return p; // 노드를 찾으면 해당 노드 반환
+    else return NULL; // 찾지 못하면 NULL 반환  
 }
-
-
 
 // 트리에서 최소값을 찾는 함수
 node_t *rbtree_min(const rbtree *t) {
@@ -192,7 +186,6 @@ node_t *rbtree_min(const rbtree *t) {
 
 // 트리에서 최대값을 찾는 함수
 node_t *rbtree_max(const rbtree *t) {
-  // TODO: implement find
   if(t->root == t->nil) return t->nil; // root 노드가 NIL 노드이면 NIL 노드 반환
   node_t* x = t->root;
   while(x->right != t->nil) x = x->right; // x를 x의 오른쪽 자식 노드로 업데이트
@@ -271,8 +264,8 @@ void rbtree_delete_fixup(rbtree *t, node_t *x) {
   x->color = RBTREE_BLACK; // x의 색을 검은색으로 만듦
 }
 
+// 트리에서 노드를 삭제하는 함수
 int rbtree_erase(rbtree *t, node_t *z) {
-  // TODO: implement erase
   node_t *y = z; // y는 삭제할 노드
   node_t *x; // x는 y의 자식 노드
 
@@ -323,11 +316,12 @@ int inorder_traversal(const rbtree *t, node_t *x, key_t *arr, int *index, const 
 
     if(!inorder_traversal(t, x->right, arr, index, n)) return 0; // 오른쪽 서브트리 방문
   }
-  return 1;
+  return 1; // 성공적으로 순회하면 1 반환
 } 
 
 // 트리를 배열로 변환하는 함수
-int rbtree_to_array(const rbtree *t, key_t *arr, const size_t n) {
+int rbtree_to_array(const rbtree *t, key_t *arr, const size_t n) 
+{
   int index = 0;
   if(!inorder_traversal(t, t->root, arr, &index, n)) return -1;
   return 0;
