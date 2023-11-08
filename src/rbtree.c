@@ -1,12 +1,9 @@
 #include "rbtree.h"
 
 #include <stdlib.h>
+#include <stdio.h> // for debugging
 
-#include <stdio.h>
-
-
-node_t *rbtree_find(const rbtree *t, const key_t key);
-
+// 트리를 생성하는 함수
 rbtree *new_rbtree(void) {
   // TODO: initialize struct if needed
   rbtree *p = (rbtree *)calloc(1, sizeof(rbtree)); // 트리 구조체를 할당
@@ -20,11 +17,7 @@ rbtree *new_rbtree(void) {
   p->nil = NIL; // NIL 노드를 가리키도록 함
   p->root = NIL; // root 노드를 NIL 노드로 초기화
   return p; // 트리 구조체 반환
-  return p;
 }
-
-
-
 
 // 왼쪽으로 회전하는 함수
 void left_rotate(rbtree *t, node_t *x) {
@@ -62,7 +55,6 @@ void right_rotate(rbtree *t, node_t *x) {
 
 // 노드를 이동하는 함수
 void rbtree_transplant(rbtree *t, node_t *u, node_t *v) {
-  // if(u == t->nil || v == t->nil) return; // u가 NIL 노드이면 함수 종료
 
   if (u->parent == t->nil) t->root = v; // u의 부모 노드가 NIL 노드이면 v를 root 노드로 만듦
   else if (u == u->parent->left) u->parent->left = v; // u가 u의 부모 노드의 왼쪽 자식 노드이면 v를 u의 부모 노드의 왼쪽 자식 노드로 만듦
